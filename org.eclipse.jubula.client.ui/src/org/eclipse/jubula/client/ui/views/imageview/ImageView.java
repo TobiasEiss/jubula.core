@@ -118,9 +118,8 @@ public class ImageView extends ViewPart implements IJBPart, ISelectionProvider {
             }
         }
         
-        if (provider == null) {
+        if (provider != null) {
             clearImage();
-        } else {
             handleSelection(provider);
         }
     }
