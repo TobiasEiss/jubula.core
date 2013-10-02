@@ -10,6 +10,9 @@
  *******************************************************************************/
 package org.eclipse.jubula.client.ui.handlers;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
@@ -18,8 +21,8 @@ import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jubula.client.core.model.TestResultNode;
-import org.eclipse.jubula.client.ui.editors.TestResultViewer;
-import org.eclipse.ui.IEditorPart;
+import org.eclipse.jubula.client.ui.utils.TreeViewerIterator;
+import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.handlers.HandlerUtil;
 
 
@@ -37,37 +40,47 @@ public abstract class AbstractGoToTestResultErrorHandler
      */
     public final Object execute(ExecutionEvent event) 
         throws ExecutionException {
+
+        List<IWorkbenchPart> listOfPossibleParts =
+                new LinkedList<IWorkbenchPart>();
+        listOfPossibleParts.add(HandlerUtil.getActivePart(event));
+        listOfPossibleParts.add(HandlerUtil.getActiveEditor(event));
+        TreeViewer viewer = handleActiveWorkbenchParts(listOfPossibleParts);
         
-        IEditorPart activeEditor = HandlerUtil.getActiveEditorChecked(event);
-        activeEditor.setFocus();
-        if (activeEditor instanceof TestResultViewer) {
-            TreeViewer viewer = 
-                ((TestResultViewer)activeEditor).getTreeViewer();
-            IStructuredSelection selection = 
-                (IStructuredSelection)viewer.getSelection();
-            ITreeContentProvider contentProvider = 
-                (ITreeContentProvider)viewer.getContentProvider();
-            TestResultNode startingNode = null;
-            if (selection.getFirstElement() instanceof TestResultNode) {
-                startingNode = (TestResultNode)selection.getFirstElement();
-            } else {
-                Object [] rootElements = 
-                    contentProvider.getElements(viewer.getInput());
-                for (Object element : rootElements) {
-                    if (element instanceof TestResultNode) {
-                        startingNode = (TestResultNode)element;
-                        break;
-                    }
+        IStructuredSelection selection = 
+            (IStructuredSelection)viewer.getSelection();
+        ITreeContentProvider contentProvider = 
+            (ITreeContentProvider)viewer.getContentProvider();
+        TestResultNode startingNode = null;
+        if (selection.getFirstElement() instanceof TestResultNode) {
+            startingNode = (TestResultNode)selection.getFirstElement();
+        } else {
+            Object[] rootElements = 
+                contentProvider.getElements(viewer.getInput());
+            for (Object element : rootElements) {
+                if (element instanceof TestResultNode) {
+                    startingNode = (TestResultNode)element;
+                    break;
                 }
             }
-            
-            TestResultNode targetNode = findTargetNode(viewer, startingNode);
-
-            if (targetNode != null) {
-                viewer.reveal(targetNode);
-                viewer.setSelection(new StructuredSelection(targetNode));
+        }
+       
+        TestResultNode targetNode = null;
+        TreeViewerIterator iter = new TreeViewerIterator(viewer, startingNode,
+            isForwardIteration());
+        while (iter.hasNext() && targetNode == null) {
+            Object nextElement = iter.next();
+            if (nextElement instanceof TestResultNode) {
+                TestResultNode node = (TestResultNode) nextElement;
+                if (isErrorNode(node)) {
+                    targetNode = node;
+                }
             }
-
+        }
+        
+        if (targetNode != null) {
+            viewer.reveal(targetNode);
+            viewer.setSelection(new StructuredSelection(targetNode));
         }
 
         return null;
@@ -78,20 +91,22 @@ public abstract class AbstractGoToTestResultErrorHandler
      * @param node The node to check.
      * @return <code>true</code> if the node is considered an error node.
      */
-    protected final boolean isErrorNode(TestResultNode node) {
+    private final boolean isErrorNode(TestResultNode node) {
         int status = node.getStatus();
         return (status == TestResultNode.ERROR)
                 || (status == TestResultNode.ABORT);
     }
     
     /**
-     * 
-     * @param viewer The viewer containg the contents to search.
-     * @param startingNode The node with which the search begins.
-     * @return the node that should be navigated to, or <code>null</code> if no
-     *         such node could be found.
+     * @return a boolean describing the direction of iteration:
+     * true = forwards; false = backwards
      */
-    protected abstract TestResultNode findTargetNode(
-            TreeViewer viewer, TestResultNode startingNode);
+    protected abstract boolean isForwardIteration();
     
+    /**
+     * @param listOfPossibleParts a list of two possible parts to execute the GoTo on
+     * @return the TreeViewer of the active part
+     */
+    protected abstract TreeViewer handleActiveWorkbenchParts(
+            List<IWorkbenchPart> listOfPossibleParts);  
 }

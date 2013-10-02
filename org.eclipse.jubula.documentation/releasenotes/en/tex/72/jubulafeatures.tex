@@ -2,8 +2,11 @@
 \begin{itemize}
 \item You can now integrate your automated tests with external repositories which you have configured in your workspace and your \gdproject{}.
 \item The integration lets you specify a task ID on items in your \gdproject{} -- most usually the task from an external system for which this test is relevant. 
-\item You can open the task for a node (if one is defined) from the browsers. 
-\item When a test runs via the \ite{}, the test results from the test are attached to the relevant tasks in the external repository as a comment with a link which can be opened in the \dash{}. 
+\item You can open the task for a node from the browsers. 
+\item When a test runs via the \ite{}, the test results from the test are attached to the relevant tasks in the external repository as a comment with a link which can be opened in the \dash{}.
+\item It is not currently possible to decide on a per-test basis whether or not to report. If you do not want to report for a test, then you should remove the checkboxes for reporting from the \gdproject{} properties. 
+\item \gdjobs{} currently do not report to external systems. 
+\item We have tested the integration on Bugzilla and JIRA successfully. An integration with HP ALM is not possible in the current version. 
 \end{itemize}
 
 \textbf{New option in the testexec}
@@ -48,4 +51,19 @@
 http://HOSTNAME:PORTNUMBER/dashboard
 \end{verbatim}
 \item The properties for the dashboard have also been renamed from \textit{com.bredexsw.guidancer} to \textit{org.eclipse.jubula}. Please ensure you update any properties files you use for the dashboard server.
+\end{itemize}
+
+\textbf{Next and previous error buttons in \gdtestresultview{} that appears during test execution}
+\begin{itemize}
+\item You can now also use the next and previous error buttons for the \gdtestresultview{} that appears during test execution.
+\end{itemize}
+
+\textbf{New test data functions}
+There are new functions available in the \ite{}:
+\begin{itemize}
+\item randomInt(exclusive maximum value) -- to generate a random integer.
+\item replaceAll(string,regular expression,replacement) -- to replace parts of a string with something else.
+\item uuid() -- to generate a universal unique ID.
+\item base64Encode(string) -- to encode a string to base64.
+\item base64Decode(string) -- to decode a string from base64.
 \end{itemize}

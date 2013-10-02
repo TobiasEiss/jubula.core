@@ -68,7 +68,6 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.DirectoryDialog;
-import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Widget;
 import org.eclipse.ui.PlatformUI;
@@ -388,7 +387,7 @@ public abstract class AutConfigComponent extends ScrolledComposite {
     /**
      * @param areaComposite The composite for which to create and set a layout.
      */
-    protected void createLayout(Composite areaComposite) {
+    private void createLayout(Composite areaComposite) {
         areaComposite.setLayout(
             createDefaultGridLayout(NUM_COLUMNS));
         GridData gridData = new GridData(GridData.BEGINNING);
@@ -484,11 +483,9 @@ public abstract class AutConfigComponent extends ScrolledComposite {
      * @param basicAreaComposite The composite that represents the basic area.
      */
     protected void createBasicArea(Composite basicAreaComposite) {
-        createBasicAreaNorth(basicAreaComposite);
-        createBasicAreaMiddle(basicAreaComposite);
-        createBasicAreaSouth(basicAreaComposite);
+        initGUIConfigAndServer(basicAreaComposite);
     }
-
+    
     /**
      * Create this dialog's advanced area component.
      * 
@@ -520,7 +517,7 @@ public abstract class AutConfigComponent extends ScrolledComposite {
      * 
      * @param parent The parent Composite.
      */
-    private void createBasicAreaNorth(Composite parent) {
+    private void initGUIConfigAndServer(Composite parent) {
         // name property
         UIComponentHelper.createLabel(parent, "AUTConfigComponent.configName"); //$NON-NLS-1$ 
         m_autConfigNameTextField = UIComponentHelper.createTextField(parent, 2);
@@ -534,24 +531,13 @@ public abstract class AutConfigComponent extends ScrolledComposite {
             "AUTConfigComponent.autId.helpText", false); //$NON-NLS-1$
          
         m_autIdTextField = UIComponentHelper.createTextField(parent, 2);
-    }
-
-    /**
-     * @param basicAreaComposite The composite that represents the basic area.
-     */
-    protected void createBasicAreaMiddle(Composite basicAreaComposite) {
-        UIComponentHelper.createSeparator(basicAreaComposite, NUM_COLUMNS);
+        
+        UIComponentHelper.createSeparator(parent, NUM_COLUMNS);
+        
         // AUT directory editor
         if (!isJavaAut()) {
-            createAutDirectoryEditor(basicAreaComposite);
+            createAutDirectoryEditor(parent);
         }
-    }
-
-    /**
-     * @param basicAreaComposite The composite that represents the basic area.
-     */
-    protected void createBasicAreaSouth(Composite basicAreaComposite) {
-        // currently no default implementation
     }
 
     /**
@@ -639,28 +625,13 @@ public abstract class AutConfigComponent extends ScrolledComposite {
     }
 
     /**
-     * Resize the given composite to the currently calculated default size.
-     * @param composite The composite to resize.
-     */
-    private void resize(Composite composite) {
-        Point newSize = 
-                composite.computeSize(SWT.DEFAULT, SWT.DEFAULT);
-        composite.setSize(newSize);
-        composite.layout();
-    }
-
-    /**
-     * Resize the dialog to the default layout size. This is necessary,
-     * after adding / removing composites.
+     * Resizes the content composite based on added/removed components.
      */
     protected void resize() {
-        Shell dialogShell = m_contentComposite.getShell();
-        Composite composite = m_contentComposite;
-        // resize from content composite to outer most composite of dialog
-        while (composite.getShell() == dialogShell) { // composite from dialog
-            resize(composite);
-            composite = composite.getParent(); // goto parent composite
-        }
+        Point newSize = 
+            m_contentComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT);
+        m_contentComposite.setSize(newSize);
+        m_contentComposite.layout();
     }
 
     /**
@@ -670,7 +641,7 @@ public abstract class AutConfigComponent extends ScrolledComposite {
      * @param composite The composite for which to set the visibility.
      * @param visible Whether the composite should be made visible or invisible.
      */
-    protected void setCompositeVisible(Composite composite, boolean visible) {
+    private void setCompositeVisible(Composite composite, boolean visible) {
         composite.setVisible(visible);
         ((GridData)composite.getLayoutData()).exclude = !visible;
     }
@@ -998,7 +969,7 @@ public abstract class AutConfigComponent extends ScrolledComposite {
             int textLength = combo.getText().length();
             String text = combo.getText();
             return checkTextInput(emptyAllowed, textLength, text);
-        }
+        } 
         if (modifiedWidget instanceof Text) {
             Text textField = (Text)modifiedWidget;
             int textLength = textField.getText().length();
@@ -1145,7 +1116,7 @@ public abstract class AutConfigComponent extends ScrolledComposite {
     /**
      * Checks validity of all fields.
      */
-    public final void checkAll() {
+    public final void checkAll() {        
         checkAll(m_paramList);
         if (m_paramList.isEmpty()) {
             setIsValid(true);
@@ -1158,7 +1129,7 @@ public abstract class AutConfigComponent extends ScrolledComposite {
                 }
             }
             if (isValid) {
-                setIsValid(false);
+                setIsValid(false);                
             } else {
                 fireError();
             }

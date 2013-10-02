@@ -12,10 +12,7 @@ package org.eclipse.jubula.client.ui.rcp.widgets.autconfig;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
-
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.jubula.client.core.model.IPersistentObject;
 import org.eclipse.jubula.client.ui.rcp.Plugin;
@@ -27,16 +24,13 @@ import org.eclipse.jubula.client.ui.rcp.utils.Utils;
 import org.eclipse.jubula.client.ui.utils.LayoutUtil;
 import org.eclipse.jubula.client.ui.widgets.UIComponentHelper;
 import org.eclipse.jubula.tools.constants.AutConfigConstants;
-import org.eclipse.jubula.tools.constants.StringConstants;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
-import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
-import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Text;
@@ -45,36 +39,23 @@ import org.eclipse.swt.widgets.Text;
  * ConfigurationArea for Win toolkit projects
  */
 public class WinAutConfigComponent extends AutConfigComponent {
-
     /** the number of lines in a text field */
     protected static final int COMPOSITE_WIDTH = 250;
-
+    
     /** for check if the executable text field is empty */
     private static boolean isExecFieldEmpty = true;
-
+       
     /** path of the executable file directory */
     private static String executablePath;
 
     /** for check if the executable text field is valid */
     private boolean m_isExecFieldValid = true;
 
-    /** Component visible for AUT type Windows Desktop */
-    private Composite m_basicAreaNormalApplication;
-
-    /** Component visible for AUT type Modern UI App */
-    private Composite m_basicAreaModernUiApp;
-
-    /** Combo box for the AUT type (Normal Application or Modern UI App) */
-    private Combo m_comboAutType;
-
     /** text field for the executable that will launch the AUT */
     private Text m_execTextField;
-
+    
     /** browse button for the executable */
     private Button m_execButton;
-
-    /** text field for the Modern UI App name to launch the AUT */
-    private Text m_modernUiAppName;
 
     /** text field for the aut_args */
     private Text m_autArgsTextField;
@@ -101,6 +82,9 @@ public class WinAutConfigComponent extends AutConfigComponent {
      * {@inheritDoc}
      */
     protected void initState() {
+        m_execTextField.setEnabled(true);
+        m_execButton.setEnabled(true);
+        m_autArgsTextField.setEnabled(true);
         checkLocalhostServer();
         RemoteFileBrowserBP.clearCache(); // avoid all caches
     }
@@ -111,75 +95,35 @@ public class WinAutConfigComponent extends AutConfigComponent {
     protected boolean checkLocalhostServer() {
         boolean enable = super.checkLocalhostServer();
         boolean browseEnabled = enable || isRemoteRequest();
-        m_execButton.setEnabled(browseEnabled);
+        m_execButton.setEnabled(browseEnabled && m_execButton.isEnabled());
         return enable;
     }
 
     /**
      * {@inheritDoc}
      */
-    protected void createBasicAreaMiddle(Composite basicAreaComposite) {
-        // add combo box for switching between normal and Modern UI Apps
-        UIComponentHelper.createLabel(basicAreaComposite,
-                Messages.AUTConfigComponentAutType);
-        List<String> appTypeNames = new ArrayList<String>();
-        appTypeNames.add(Messages.AUTConfigComponentNormalApplication);
-        appTypeNames.add(Messages.AUTConfigComponentModernUiApp);
-        m_comboAutType = UIComponentHelper.createCombo(
-                basicAreaComposite, 1, appTypeNames, appTypeNames, false);
-        // add separator
-        UIComponentHelper.createSeparator(basicAreaComposite, NUM_COLUMNS);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    protected void createBasicAreaSouth(Composite basicAreaComposite) {
-        m_basicAreaNormalApplication =
-                new Composite(basicAreaComposite, SWT.NONE);
-        m_basicAreaModernUiApp =
-                new Composite(basicAreaComposite, SWT.NONE);
-        createLayout(m_basicAreaNormalApplication);
-        createLayout(m_basicAreaModernUiApp);
-        final GridData gridDataArea =
-                (GridData) m_basicAreaModernUiApp.getLayoutData();
-        gridDataArea.horizontalAlignment = SWT.FILL;
-
-        // Normal Application...
-        // working directory
-        createAutDirectoryEditor(m_basicAreaNormalApplication);
+    protected void createBasicArea(Composite basicAreaComposite) {
+        super.createBasicArea(basicAreaComposite);
         // executable chooser
-        UIComponentHelper.createLabel(m_basicAreaNormalApplication,
-                Messages.AUTConfigComponentExecFileName);
+        UIComponentHelper.createLabel(basicAreaComposite, 
+            "AUTConfigComponent.exec");  //$NON-NLS-1$
         m_execTextField = UIComponentHelper.createTextField(
-                m_basicAreaNormalApplication, 1);
+                basicAreaComposite, 1);
         LayoutUtil.setMaxChar(m_execTextField,
                 IPersistentObject.MAX_STRING_LENGTH);
         m_execButton = new Button(
-                UIComponentHelper.createLayoutComposite(
-                        m_basicAreaNormalApplication),
+                UIComponentHelper.createLayoutComposite(basicAreaComposite),
                 SWT.PUSH);
         m_execButton.setText(Messages.AUTConfigComponentBrowse);
         m_execButton.setLayoutData(BUTTON_LAYOUT);
         m_execButton.setEnabled(Utils.isLocalhost());
 
-        // Modern UI App...
-        UIComponentHelper.createLabel(m_basicAreaModernUiApp,
-                Messages.AUTConfigComponentAppName);
-        m_modernUiAppName = UIComponentHelper.createTextField(
-                m_basicAreaModernUiApp, 2);
-
-        LayoutUtil.setMaxChar(m_modernUiAppName,
-                IPersistentObject.MAX_STRING_LENGTH);
-
-        // AUT arguments
-        ControlDecorator.createInfo(UIComponentHelper.createLabel(
-                basicAreaComposite,
-                Messages.AUTConfigComponentArguments),
-                Messages.AUTConfigComponentArgumentsControlDecorator, false);
+        // parameter editor
+        ControlDecorator.decorateInfo(UIComponentHelper.createLabel(
+                basicAreaComposite, "AUTConfigComponent.autArguments"), //$NON-NLS-1$
+                "ControlDecorator.AUTArguments", false); //$NON-NLS-1$
         m_autArgsTextField =
             UIComponentHelper.createTextField(basicAreaComposite, 2);
-
     }
 
     /**
@@ -188,22 +132,12 @@ public class WinAutConfigComponent extends AutConfigComponent {
      */
     protected void populateBasicArea(Map<String, String> data) {
         super.populateBasicArea(data);
-        // AUT type
-        int autTypeIndex = new Integer("0" //$NON-NLS-1$
-                + StringUtils.defaultString(
-                        data.get(AutConfigConstants.AUT_TYPE)));
-        m_comboAutType.select(autTypeIndex);
         // executable filename
         m_execTextField.setText(StringUtils.defaultString(data
                 .get(AutConfigConstants.EXECUTABLE)));
-        // Modern UI App name
-        m_modernUiAppName.setText(StringUtils.defaultString(data
-                .get(AutConfigConstants.APP_NAME)));
         // AUT arguments
         m_autArgsTextField.setText(StringUtils.defaultString(data.get(
              AutConfigConstants.AUT_ARGUMENTS)));
-        // update visibility of AUT type specific composites and resize
-        setVisibilityByAutTypeAndResize();
     }
 
     /**
@@ -212,22 +146,6 @@ public class WinAutConfigComponent extends AutConfigComponent {
      */
     protected void createAdvancedArea(Composite advancedAreaComposite) {
         // unused
-    }
-
-    /**
-     * Set the visibility of the composite for Normal Applications or Modern UI Apps
-     * depending on the selected AUT type.
-     */
-    private void setVisibilityByAutTypeAndResize() {
-        if (m_comboAutType.getText()
-                .equals(Messages.AUTConfigComponentNormalApplication)) {
-            setCompositeVisible(m_basicAreaNormalApplication, true);
-            setCompositeVisible(m_basicAreaModernUiApp, false);
-        } else {
-            setCompositeVisible(m_basicAreaNormalApplication, false);
-            setCompositeVisible(m_basicAreaModernUiApp, true);
-        }
-        resize();
     }
 
     @Override
@@ -314,11 +232,10 @@ public class WinAutConfigComponent extends AutConfigComponent {
 
         WidgetSelectionListener selectionListener = getSelectionListener();
         WidgetModifyListener modifyListener = getModifyListener();
-
-        m_comboAutType.addModifyListener(modifyListener);
+        
+        getServerCombo().addModifyListener(modifyListener);        
         m_execButton.addSelectionListener(selectionListener);
         m_execTextField.addModifyListener(modifyListener);
-        m_modernUiAppName.addModifyListener(modifyListener);
         m_autArgsTextField.addModifyListener(modifyListener);
     }
 
@@ -331,16 +248,15 @@ public class WinAutConfigComponent extends AutConfigComponent {
         WidgetSelectionListener selectionListener = getSelectionListener();
         WidgetModifyListener modifyListener = getModifyListener();
 
-        m_comboAutType.removeModifyListener(modifyListener);
         m_execButton.removeSelectionListener(selectionListener);
         m_execTextField.removeModifyListener(modifyListener);
-        m_modernUiAppName.removeModifyListener(modifyListener);
         m_autArgsTextField.removeModifyListener(modifyListener);
     }
 
     /**
      * @return the single instance of the selection listener.
      */
+    @SuppressWarnings("synthetic-access")
     private WidgetSelectionListener getSelectionListener() {
         if (m_selectionListener == null) {
             m_selectionListener = new WidgetSelectionListener();
@@ -351,6 +267,7 @@ public class WinAutConfigComponent extends AutConfigComponent {
     /**
      * @return the modifier listener.
      */
+    @SuppressWarnings("synthetic-access")
     private WidgetModifyListener getModifyListener() {
         if (m_modifyListener == null) {
             m_modifyListener = new WidgetModifyListener();
@@ -395,21 +312,18 @@ public class WinAutConfigComponent extends AutConfigComponent {
         @SuppressWarnings("synthetic-access")
         public void modifyText(ModifyEvent e) {
             Object source = e.getSource();
-            if (source.equals(m_comboAutType)) {
-                setVisibilityByAutTypeAndResize();
-                putConfigValue(AutConfigConstants.AUT_TYPE,
-                    StringConstants.EMPTY 
-                        + m_comboAutType.getSelectionIndex());
-            } else if (source.equals(m_execTextField)
-                    || source.equals(m_modernUiAppName)
+            if (source.equals(m_execTextField)
                     || source.equals(m_autArgsTextField)) {
-                checkAll();
+                if (source.equals(m_execTextField)) {
+                    checkAll();
+                } else if (source.equals(m_autArgsTextField)) {
+                    checkAll();
+                }
             } else if (source.equals(getServerCombo())) {
                 checkLocalhostServer();
                 checkAll();
             }
         }
-
     }
 
     /**
@@ -418,7 +332,6 @@ public class WinAutConfigComponent extends AutConfigComponent {
     protected void checkAll(java.util.List<DialogStatusParameter> paramList) {
         super.checkAll(paramList);
         addError(paramList, modifyExecTextField());
-        addError(paramList, modifyModernUiAppName());
         addError(paramList, modifyAutParamFieldAction());
     }
 
@@ -427,8 +340,9 @@ public class WinAutConfigComponent extends AutConfigComponent {
      * @return <code>null</code> if the new value is valid. Otherwise, returns
      *         a status parameter indicating the cause of the problem.
      */
-    private DialogStatusParameter modifyExecTextField() {
+    DialogStatusParameter modifyExecTextField() {
         DialogStatusParameter error = null;
+        m_isExecFieldValid = true;
         isExecFieldEmpty = m_execTextField.getText().length() == 0;
         String filename = m_execTextField.getText();
         if (isValid(m_execTextField, true) && !isExecFieldEmpty) {
@@ -462,28 +376,12 @@ public class WinAutConfigComponent extends AutConfigComponent {
             error = createErrorStatus(
                     Messages.AUTConfigComponentWrongExecutable);
         }
-        m_isExecFieldValid = (error == null);
+        if (error != null) {
+            m_isExecFieldValid = false;
+        }
         putConfigValue(AutConfigConstants.EXECUTABLE,
                 m_execTextField.getText());
         executablePath = filename;
-        return error;
-    }
-
-    /**
-     * Check the Modern UI App name.
-     * @return <code>null</code> if the new value is valid. Otherwise, returns
-     *         a status parameter indicating the cause of the problem.
-     */
-    private DialogStatusParameter modifyModernUiAppName() {
-        DialogStatusParameter error = null;
-        boolean isAppNameEmpty = m_modernUiAppName.getText().length() == 0;
-        if (!isValid(m_modernUiAppName, true) && !isAppNameEmpty) {
-            error = createErrorStatus(
-                    Messages.AUTConfigComponentWrongModernUiAppName);
-        }
-        //m_isModernUiAppNameValid = (error == null);
-        putConfigValue(AutConfigConstants.APP_NAME,
-                m_modernUiAppName.getText());
         return error;
     }
 
@@ -492,7 +390,7 @@ public class WinAutConfigComponent extends AutConfigComponent {
      * @return <code>null</code> if the new value is valid. Otherwise, returns
      *         a status parameter indicating the cause of the problem.
      */
-    private DialogStatusParameter modifyAutParamFieldAction() {
+    DialogStatusParameter modifyAutParamFieldAction() {
         String params = m_autArgsTextField.getText();
         putConfigValue(AutConfigConstants.AUT_ARGUMENTS, params);
         return null;

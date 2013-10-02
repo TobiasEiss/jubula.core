@@ -66,6 +66,16 @@ SupportUser & John Support \\
 \end{quote}
 This will look in the central data set called \bxname{Customer}, locate the value \bxname{SuperUser} in the \bxname{CUSTOMER\_TYPE} column, and use that line to choose the cell in the \bxname{CUSTOMER\_NAME} column -- Alice Super. 
 
+\textbf{Wrapped functions from other libraries}\\
+You can also use the following functions in your tests. For full documentation on them, please refer to the respective library.
+\begin{description}
+\item [randomInt(exclusive maximum value)]{Use this function to generate a random integer up to but not including the value you specify. The function is from \bxname{org.apache.commons.lang.math.RandomUtils}}
+\item [replaceAll(string,regular expression,replacement)]{Use this function to replace all of the parts of a string you specify with something else. The string to perform the replacement on is entered as the \bxname{string}, the part(s) of the string to replace are defined by the \bxname{regular expression}, and the string to replace it with is given as the \bxname{replacement}. This function is from \bxname{java.util.regex}.}
+\item [uuid()]{This function generates a universal unique identifier. The function is from \bxname{java.util.UUID}.}
+\item [base64Encode(string)]{This function encodes a string to base 64. The function is from \bxname{org.apache.commons.codec.binary.Base64}.}
+\item [base64Decode(string)]{This function decodes a string from base 64. The function is from \bxname{org.apache.commons.codec.binary.Base64}.}
+\end{description}
+
 \subsubsection{Embedding functions in other functions}
 Functions can be added as arguments to other functions. If, for example, you want to use the result of a subtraction as the first argument of your addition, you could write it like this:\\
 \bxshell{?add(?sub(2,1),1)}\\

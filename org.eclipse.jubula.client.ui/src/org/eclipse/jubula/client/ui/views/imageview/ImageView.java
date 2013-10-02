@@ -37,11 +37,13 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.ISelectionService;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.part.ViewPart;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
+import org.eclipse.jface.action.MenuManager;
 
 
 /**
@@ -156,6 +158,15 @@ public class ImageView extends ViewPart implements IJBPart, ISelectionProvider {
         // Allow data to be copied or moved from the drag source
         int operations = DND.DROP_COPY;
         DragSource source = new DragSource(m_imgWidget, operations);
+
+        // Create menu manager
+        MenuManager contextManager = new MenuManager();
+        contextManager.setRemoveAllWhenShown(true);
+        // Create context menu
+        Menu contextMenu = contextManager.createContextMenu(m_imgWidget);
+        m_imgWidget.setMenu(contextMenu);
+        // Register context menu
+        getSite().registerContextMenu(contextManager, this);
 
         // Provide data in Text format
         Transfer[] types = new Transfer[] { ImageTransfer.getInstance() };

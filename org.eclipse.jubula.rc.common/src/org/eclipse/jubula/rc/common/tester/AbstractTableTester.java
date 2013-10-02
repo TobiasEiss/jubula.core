@@ -594,7 +594,7 @@ public abstract class AbstractTableTester
      * {@inheritDoc}
      */
     public String rcReadValueAtMousePosition(String variable) {
-        Cell cellAtMousePosition = getTableAdapter().getSelectedCell();
+        Cell cellAtMousePosition = getCellAtMousePosition();
         return getCellText(cellAtMousePosition.getRow(), 
                 cellAtMousePosition.getCol());
     }

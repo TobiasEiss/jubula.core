@@ -2,6 +2,7 @@
 \item Before installing the new version:
 \begin{enumerate}
 \item Perform an \bxname{export all} of your \gdprojects{} from your current database(s) with the current version  (as described in the User Manual in chapter \textbf{3.5.9.2 Exporting all of the Projects from the database}). This ensures that all projects (including the unbound modules and any other library projects you use) are backed up.
+\bxwarn{When a \gdproject{} is exported, the test result details for test result reports are not exported. If you wish to keep test result reports over multiple versions, then you should ensure that you keep older \gddb{} instances and \ite{} or \dash{} versions.}
 \item Export your database preferences from your workspace as described in the User Manual (chapter \textbf{3.22.10 Importing and exporting database preferences}).
 \item Back up any extensions you have written.
 \item In your home directory, rename the \bxname{.jubula} file to e.g. \bxname{.jubula-<OLDVERSIONNUMBER>}. (The \ite{} and the \gdagent{} must not be running for this to be performed). This ensures that the new log files will be written into a new \bxname{.jubula} directory. 

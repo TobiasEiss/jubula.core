@@ -161,7 +161,7 @@ public class AutConfigSettingWizardPage extends WizardPage
         setMessage(param.getMessage(), param.getStatusType());
         setPageComplete(param.getButtonState());
     }
-
+    
     /**
      * 
      * {@inheritDoc}

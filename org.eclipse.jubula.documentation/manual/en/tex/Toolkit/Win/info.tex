@@ -1,0 +1,63 @@
+\subsubsection{The UI Automation Framework and clicking}
+
+The Windows support is realized using the Microsoft UI Automation Framework. This framework is used to access components and to perform many of the supported actions. The Automation Framework is the recommended approach to controlling .NET \gdauts{}, and it does not perform clicks or text inputs at the Operating System level; rather it invokes functions on the components. 
+
+For the majority of the click actions, however, we have implemented real clicks that are performed at the Operating System level in order to allow e.g. opening of context-menus via right click, clicks at specific positions and position-based access (e.g. for context-menus, move actions and check at mouse position).   
+
+\subsubsection{Supported \gdauts{}}
+We currently only support WinForms and WPF \gdauts{}. It may be possible to map components from e.g. Win32 \gdauts{}, but the tests on such components may fail. It is therefore worth checking with your development team what components the \gdaut{} you are testing is using. 
+
+\subsection{Information on WinForms \gdauts{}}
+\subsubsection{Supported and unsupported components}
+Our regression tests are performed on a variety of components, including (but not limited to): buttons (push, checkbox, radio), textfields, trees, tables, menus, context menus, lists, combo boxes and tabbed panes. 
+
+\textbf{Possible component restrictions}
+\begin{description}
+\item [Tables:]{Our actions have been written for and tested on tables of type System.Windows.Forms.DataGridView. Since the introduction of this component in .NET 2.0, the older System.Windows.Forms.DataGrid is no longer recommended. System.Windows.Forms.DataGrid tables are not supported.}
+\end{description}
+
+\subsubsection{Supported and unsupported actions}
+Most of the actions that are available in the \bxname{concrete} toolkit have been implemented for Windows \gdauts{}. These include, but are not limited to: clicking, checking, entering text and selecting.
+
+\textbf{Actions not (yet) implemented}
+\begin{description}
+\item [Drag and Drop]{}
+\item [Using row headers for table selection:]{Unlike other supported toolkits, Windows \gdauts{} have integrated row headers in tables. These are not yet supported. When using the actions \bxname{Select Value from Row} and \bxname{Select Cell}, the row can therefore only be selected using its index. It is not possible to enter the value in the first column to identify the row as is the case in other toolkits.}
+\item[Combo box: Check selection of entry by index:]{This action will not be implemented for Windows \gdauts{}, as the dropdown list needs to be opened to access the list items. If text is already in the text field of the combo box when it is opened, then the first item that matches the entered text is selected -- this may change the selected item and therefore the index.}
+\item[Combo box: Relative selection:]{For the same reason as above, only the value \bxname{absolute} is supported for selections by value from the combo box. }
+\item[Trees: Multiselection:]{As WinForms does not support true multiselection for Trees, any actions used to test the multiselection of a Tree will fail.}
+\item [Deprecated actions:]{Any actions marked as \bxname{deprecated} have not been implemented.}
+\item [Show Text]{}
+\item [Editability checks for tables:]{The actions for check editability on a whole table, or on individual cells within it, are not supported in the current version.}
+\item [Checking the text of password fields:]{The contents of password fields cannot be checked in tests for Windows \gdauts{}, as the Windows RC does not run in the same process as the AUT itself. Such checks on password fields will always fail with a Check Failed error.}
+\end{description}
+
+
+\subsection{Information on WPF \gdauts{}}
+The support for WPF \gdauts{} is currently experimental. We encourage you to test the support with your own \gdauts{} and welcome feedback about the current support.
+
+\subsection{Operating system language, component recognition and extensibility}
+The UI automation framework does not provide language-independent component types for component recognition. As this would have otherwise lead to language-dependent mapping, we have implemented an internal map from the component type ID to our own designation of the component type. This makes object mapping language-independent, but means that the Windows toolkit cannot currently be extended to add support for new components. 
+
+\subsection{UI automation and screen scaling}
+We recommend against changing the DPI settings on your test machines to make components and text appear larger. Such modifications may lead to unpredictable problems for test execution. The resolution of the screen, however, has no bearing on object recognition. 
+
+\subsection{Windows \gdauts{} and the observation mode}
+The observation mode cannot be used for Windows (.NET) \gdauts{}. 
+
+\subsection{Mapping components in WinForms\gdauts{}}
+
+\textbf{Composite components may be mappable as separate parts}\\
+For some components that consist of other components (e.g. combo boxes that consist of a textfield and a button), it may be possible to collect the individual components (textfield, button) as well as the whole composite (the combo box). When performing mapping, you should make sure that you are collecting the component that it makes sense to perform your chosen action on. For example, you can only perform a \bxname{Select from Combo Box} on a combo box. While it may be possible to perform a \bxname{Replace Text} on the textfield included in the combo box, it will almost always make more sense to deal with the logical component as opposed to its parts. 
+
+\textbf{Mapping of dynamic content items in components}\\
+It may be possible to map individual items within components that are addressed as a whole component in the test specification. For example, it may be possible to map individual list entries. Even when this is the case, we recommend mapping the \bxname{list} component and performing actions on the whole component that deal with its content (e.g. \bxname{Select entry from list}, \bxname{Check existence of entry in list}). This makes tests more robust and able to deal with dynamic data. 
+
+\textbf{Mapping components in tabbed panes}\\
+When mapping a component that is contained in a tabbed pane,  it is important to move the mouse cursor quickly and directly to the component you want to map, to avoid collecting the tabbed pane itself. 
+
+\subsection{Nested scrolling}
+\gdauts{} in which scrollable components are nested (e.g. a scrollable component within a scrollable component and so on) may not be supported in the current version. 
+
+\subsection{autrun not supported}
+Starting WinForms \gdauts{} with \bxname{autrun} is not yet supported. 

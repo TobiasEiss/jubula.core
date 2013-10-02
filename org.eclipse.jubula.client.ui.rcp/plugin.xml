@@ -144,6 +144,13 @@
           properties="isPasteAllowed"
           type="java.util.Collection">
     </propertyTester>
+    <propertyTester
+          class="org.eclipse.jubula.client.ui.rcp.propertytester.ImageViewPropertyTester"
+          id="org.eclipse.jubula.client.ui.rcp.propertytester.ImageViewPropertyTester"
+          namespace="org.eclipse.jubula.client.ui.rcp.ImageView"
+          properties="hasImage"
+          type="org.eclipse.jubula.client.core.model.TestResultNode">
+    </propertyTester>
   </extension>
   <extension
     id="jbMarker"
@@ -1133,6 +1140,11 @@
       contextId="org.eclipse.ui.contexts.window"
       schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
       sequence="M2+F9" />
+    <key
+      commandId="org.eclipse.jubula.client.ui.commands.SaveImageAs"
+      contextId="org.eclipse.ui.contexts.window"
+      schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+      sequence="M1+M3+S" />
     <scheme
       id="org.eclipse.jubula.client.ui.rcp.defaultKeyScheme"
       name="%JubulaDefaultKeyBindingSchemeName"
@@ -1147,6 +1159,14 @@
       markerType="org.eclipse.jubula.client.ui.rcp.jbProblem" />
   </extension>
   <extension point="org.eclipse.ui.menus">
+    <menuContribution
+        locationURI="toolbar:org.eclipse.jubula.client.ui.views.Image?after=additions">
+        <command
+            commandId="org.eclipse.jubula.client.ui.commands.SaveImageAs"
+            id="org.eclipse.jubula.client.ui.toolbar.ImageViewToolbar.SaveImageAs"
+            style="push">
+        </command>
+    </menuContribution>
     <menuContribution
       locationURI="menu:org.eclipse.jubula.client.ui.rcp.views.ComponentNameBrowser?after=additions">
       <menu label="&amp;Sort by">
@@ -1943,8 +1963,35 @@
           </command>
        </menu>
     </menuContribution>
+    <menuContribution
+      locationURI="popup:org.eclipse.jubula.client.ui.views.Image?after=additions">
+      <command
+        commandId="org.eclipse.jubula.client.ui.commands.SaveImageAs"
+        style="push" />
+    </menuContribution>
   </extension>
   <extension point="org.eclipse.ui.handlers">
+  <handler
+      class="org.eclipse.jubula.client.ui.rcp.handlers.SaveImageAsHandler"
+      commandId="org.eclipse.jubula.client.ui.commands.SaveImageAs">
+     <enabledWhen>
+     <and>
+         <count
+              value="1">
+         </count>
+         <iterate
+             ifEmpty="false"
+             operator="or">
+             <and>
+                <instanceof
+                      value="org.eclipse.jubula.client.core.model.TestResultNode">
+                </instanceof>
+                <test property="org.eclipse.jubula.client.ui.rcp.ImageView.hasImage"/>
+             </and>
+         </iterate>
+     </and>
+     </enabledWhen>
+  </handler>
     <handler
       class="org.eclipse.jubula.client.ui.rcp.handlers.AddTestResultSummaryCommentHandler"
       commandId="org.eclipse.jubula.client.ui.commands.AddComment">
@@ -2786,6 +2833,28 @@
              </and>
           </iterate>
        </enabledWhen>
+    </handler>
+    <handler
+          class="org.eclipse.jubula.client.ui.rcp.handlers.GoToNextTestResultErrorHandler"
+          commandId="org.eclipse.jubula.client.ui.commands.GoToNextError">
+       <activeWhen>
+          <with
+                variable="activePartId">
+             <equals
+                   value="org.eclipse.jubula.client.ui.rcp.views.TestResultTreeView">
+             </equals>
+          </with></activeWhen>
+    </handler>
+    <handler
+          class="org.eclipse.jubula.client.ui.rcp.handlers.GoToPreviousTestResultErrorHandler"
+          commandId="org.eclipse.jubula.client.ui.commands.GoToPreviousError">
+       <activeWhen>
+          <with
+                variable="activePartId">
+             <equals
+                   value="org.eclipse.jubula.client.ui.rcp.views.TestResultTreeView">
+             </equals>
+          </with></activeWhen>
     </handler>
   </extension>
   <extension point="org.eclipse.ui.commandImages">
@@ -3923,5 +3992,46 @@
       <description> %databaseConnectionsTransferDescription
       </description>
     </transfer>
+  </extension>
+  <extension
+        point="org.eclipse.core.expressions.definitions">
+      <!-- The following expressions containing "distinct" are client.ui.rcp specific - 
+      Other plugins define the same ID with another expression --> 
+     <definition
+           id="org.eclipse.jubula.client.ui.reference.distinct.visibleWhen.TestResultToolbar">
+        <or>
+           <with
+                 variable="activeEditorId">
+              <equals
+                    value="org.eclipse.jubula.client.ui.editors.TestResultViewer">
+              </equals>
+           </with>
+           <with
+                 variable="activePartId">
+              <equals
+                    value="org.eclipse.jubula.client.ui.rcp.views.TestResultTreeView">
+              </equals>
+           </with>
+        </or>
+     </definition>
+     <definition
+           id="org.eclipse.jubula.client.ui.reference.distinct.activeWhen.GoToTestResultError">
+        <and>
+           <with
+                 variable="activeEditorId">
+              <equals
+                    value="org.eclipse.jubula.client.ui.editors.TestResultViewer">
+              </equals>
+           </with>
+           <not>
+              <with
+                    variable="activePartId">
+                 <equals
+                       value="org.eclipse.jubula.client.ui.rcp.views.TestResultTreeView">
+                 </equals>
+              </with>
+           </not>
+        </and>
+     </definition>
   </extension>
 </plugin>

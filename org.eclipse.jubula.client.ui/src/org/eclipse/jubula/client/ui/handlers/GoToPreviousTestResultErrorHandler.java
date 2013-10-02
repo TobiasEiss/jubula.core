@@ -10,9 +10,11 @@
  *******************************************************************************/
 package org.eclipse.jubula.client.ui.handlers;
 
+import java.util.List;
+
 import org.eclipse.jface.viewers.TreeViewer;
-import org.eclipse.jubula.client.core.model.TestResultNode;
-import org.eclipse.jubula.client.ui.utils.TreeViewerIterator;
+import org.eclipse.jubula.client.ui.editors.TestResultViewer;
+import org.eclipse.ui.IWorkbenchPart;
 
 /**
  * Handler for navigating to the "previous" error in a Test Result.
@@ -26,22 +28,15 @@ public class GoToPreviousTestResultErrorHandler extends
     /**
      * {@inheritDoc}
      */
-    protected TestResultNode findTargetNode(TreeViewer viewer,
-            TestResultNode startingNode) {
-
-        TreeViewerIterator iter = new TreeViewerIterator(viewer, startingNode,
-                false);
-        while (iter.hasNext()) {
-            Object nextElement = iter.next();
-            if (nextElement instanceof TestResultNode) {
-                TestResultNode node = (TestResultNode) nextElement;
-                if (isErrorNode(node)) {
-                    return node;
-                }
-            }
-        }
-
-        return null;
+    protected boolean isForwardIteration() {
+        return false;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    protected TreeViewer handleActiveWorkbenchParts(List<IWorkbenchPart> list) {
+        list.get(1).setFocus();
+        return ((TestResultViewer) list.get(1)).getTreeViewer();
+    }
 }

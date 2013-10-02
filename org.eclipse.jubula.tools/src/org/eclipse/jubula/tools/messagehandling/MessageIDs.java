@@ -35,6 +35,9 @@ public class MessageIDs {
     public static final Integer E_INVALID_WORKSPACE = new Integer(1003);
     /** file access is impossible due to configuration problems */
     public static final Integer E_CONFIG_ERROR = new Integer(1004);
+    /** if no write access to given file */
+    public static final Integer E_FILE_NO_PERMISSION = new Integer(1005);
+
     // -- DATABASE ERROR IDs -----------------------------------------------
     /** if no or wrong username and password */
     public static final Integer E_NO_DB_CONNECTION = new Integer(2000);
@@ -847,6 +850,7 @@ public class MessageIDs {
         messageMap.put(E_PROPERTIES_FILE_NOT_FOUND, e, "ErrorMessage.PROPERTIES_FILE_NOT_FOUND", new String[]{"ErrorDetail.PROPERTIES_FILE_NOT_FOUND"}); //$NON-NLS-1$ //$NON-NLS-2$
         messageMap.put(E_INVALID_WORKSPACE, e, "ErrorMessage.INVALID_WORKSPACE", new String[]{"ErrorDetail.INVALID_WORKSPACE"}); //$NON-NLS-1$ //$NON-NLS-2$
         messageMap.put(E_CONFIG_ERROR, e, "ErrorMessage.CONFIG_ERROR", null); //$NON-NLS-1$
+        messageMap.put(E_FILE_NO_PERMISSION, e, "ErrorMessage.FILE_NO_PERMISSION", null); //$NON-NLS-1$
     }
     
     /**

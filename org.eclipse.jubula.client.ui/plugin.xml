@@ -59,24 +59,21 @@
 					id="org.eclipse.jubula.client.ui.toolbar.TestResultToolbar.GoToNextError"
 					style="push">
 					<visibleWhen checkEnabled="false">
-						<with variable="activeEditorId">
-							<equals
-								value="org.eclipse.jubula.client.ui.editors.TestResultViewer">
-							</equals>
-						</with>
+                        <reference
+                          definitionId="org.eclipse.jubula.client.ui.reference.distinct.visibleWhen.TestResultToolbar">
+                        </reference>
 					</visibleWhen>
 				</command>
 				<command
 					commandId="org.eclipse.jubula.client.ui.commands.GoToPreviousError"
 					id="org.eclipse.jubula.client.ui.toolbar.TestResultToolbar.GoToPreviousError"
 					style="push">
-					<visibleWhen checkEnabled="false">
-						<with variable="activeEditorId">
-							<equals
-								value="org.eclipse.jubula.client.ui.editors.TestResultViewer">
-							</equals>
-						</with>
-					</visibleWhen>
+                    <visibleWhen
+                        checkEnabled="false">
+                        <reference
+                          definitionId="org.eclipse.jubula.client.ui.reference.distinct.visibleWhen.TestResultToolbar">
+                        </reference>
+                    </visibleWhen>
 				</command>
 				<separator name="GlobalActions" visible="false">
 				</separator>
@@ -122,6 +119,10 @@
   <image
         commandId="org.eclipse.jubula.client.ui.commands.ExportTestResults"
         icon="icons/exportTestResults.gif">
+  </image>
+  <image
+        commandId="org.eclipse.jubula.client.ui.commands.SaveImageAs"
+        icon="icons/saveAsNew.gif">
   </image>
     </extension>
     <extension point="org.eclipse.core.expressions.propertyTesters">
@@ -171,24 +172,18 @@
         class="org.eclipse.jubula.client.ui.handlers.GoToNextTestResultErrorHandler"
         commandId="org.eclipse.jubula.client.ui.commands.GoToNextError">
      <activeWhen>
-        <with
-              variable="activeEditorId">
-           <equals
-                 value="org.eclipse.jubula.client.ui.editors.TestResultViewer">
-           </equals>
-        </with>
+        <reference
+              definitionId="org.eclipse.jubula.client.ui.reference.distinct.activeWhen.GoToTestResultError">
+        </reference>
      </activeWhen>
   </handler>
   <handler
         class="org.eclipse.jubula.client.ui.handlers.GoToPreviousTestResultErrorHandler"
         commandId="org.eclipse.jubula.client.ui.commands.GoToPreviousError">
      <activeWhen>
-        <with
-              variable="activeEditorId">
-           <equals
-                 value="org.eclipse.jubula.client.ui.editors.TestResultViewer">
-           </equals>
-        </with>
+        <reference
+              definitionId="org.eclipse.jubula.client.ui.reference.distinct.activeWhen.GoToTestResultError">
+        </reference>
      </activeWhen>
   </handler>
     </extension>
@@ -262,6 +257,11 @@
           id="org.eclipse.jubula.client.ui.commands.ExportTestResults"
           name="%ExportTestResultsCommandName">
     </command>
+    <command
+		    categoryId="org.eclipse.jubula.client.ui.commands"
+		    id="org.eclipse.jubula.client.ui.commands.SaveImageAs"
+		    name="%SaveImageAs">
+	</command>
     </extension>
     <extension
           point="org.eclipse.ui.preferencePages">

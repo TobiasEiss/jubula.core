@@ -14,7 +14,10 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.EntityNotFoundException;
+
 import org.apache.commons.lang.StringUtils;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jubula.client.core.businessprocess.ComponentNamesBP;
 import org.eclipse.jubula.client.core.businessprocess.ProjectNameBP;
 import org.eclipse.jubula.client.core.events.DataEventDispatcher;
@@ -463,7 +466,7 @@ public class ProjectGeneralPropertyPage extends AbstractProjectPropertyPage {
                     .getUsedProjects());
             newReused.removeAll(origReused);
             getEditSupport().saveWorkVersion();
-            refreshProject();
+            refreshAutMainList();
             DataEventDispatcher ded = DataEventDispatcher.getInstance();
             ded.fireProjectStateChanged(ProjectState.prop_modified);
             for (IReusedProjectPO reused : newReused) {
@@ -526,6 +529,23 @@ public class ProjectGeneralPropertyPage extends AbstractProjectPropertyPage {
     private void fireOkPressed() throws PMException {
         for (IOkListener listener : m_okListenerList) {
             listener.okPressed();
+        }
+    }
+
+    /**
+     * Refreshes the AutMainList of the Project.
+     */
+    private void refreshAutMainList() throws ProjectDeletedException {
+        try {
+            GeneralStorage.getInstance().getMasterSession().refresh(
+                GeneralStorage.getInstance().getProject().getAutCont());
+        } catch (EntityNotFoundException enfe) {
+            // Occurs if any Object Mapping information has been deleted while
+            // the Project Properties were being edited.
+            // Refresh the entire master session to ensure that AUT settings
+            // and Object Mappings are in sync
+            GeneralStorage.getInstance().reloadMasterSession(
+                    new NullProgressMonitor());
         }
     }
 

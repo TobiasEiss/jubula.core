@@ -296,7 +296,7 @@ public final class ALMAccess {
                     new NullProgressMonitor());
         } catch (CoreException e) {
             return new Status(IStatus.ERROR, Activator.ID,
-                    e.getLocalizedMessage());
+                    e.getLocalizedMessage().replace("\n\n", " ")); //$NON-NLS-1$ //$NON-NLS-2$
         }
         
         IStatus repoStatus = repository.getStatus();
