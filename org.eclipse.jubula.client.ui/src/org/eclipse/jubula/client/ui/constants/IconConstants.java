@@ -247,7 +247,7 @@ public class IconConstants {
     /** event handler image */
     public static final Image RESULT_EH_IMAGE = Plugin.getImage("EventHandler.gif"); //$NON-NLS-1$
     /** referenced testCase image */
-    public static final Image TC_REF_IMAGE = Plugin.getImage("testCaseRef.gif"); //$NON-NLS-1$
+    public static final Image TC_REF_IMAGE = Plugin.getImage("testcaseRef.png"); //$NON-NLS-1$
     /** referenced testSuite image */
     public static final Image TS_REF_IMAGE = Plugin.getImage("testSuiteRef.gif"); //$NON-NLS-1$
     /** logical name image */
@@ -270,12 +270,32 @@ public class IconConstants {
     /** testSuite image */
     public static final Image TS_DISABLED_IMAGE = Plugin.getImage("testSuiteNode_disabled.gif"); //$NON-NLS-1$
     /** test case image */
-    public static final Image TC_IMAGE = Plugin.getImage("testCase.gif"); //$NON-NLS-1$
+    public static final Image TC_IMAGE = Plugin.getImage("testcase.png"); //$NON-NLS-1$
     /** testCase_disabled image */
     /** test case image */
     public static final Image ROOT_IMAGE = Plugin.getImage("root.gif"); //$NON-NLS-1$
     /** test case image */
     public static final Image PROBLEM_CAT_IMAGE = Plugin.getImage("problemCategory.gif"); //$NON-NLS-1$
+    /** Anwendungsfall image */
+    public static final Image TC_ANWENDUNGSFALL_IMAGE = Plugin.getImage("anwendungsfall.png"); //$NON-NLS-1$
+    /** Testfall image */
+    public static final Image TC_TESTFALL_IMAGE = Plugin.getImage("testfall.png"); //$NON-NLS-1$
+    /** Fachkonzept image */
+    public static final Image TC_FACHKONZEPT_IMAGE = Plugin.getImage("fachkonzept.png"); //$NON-NLS-1$
+    /** public tc image */
+    public static final Image TC_PUBLIC_IMAGE = Plugin.getImage("publicKontext.png"); //$NON-NLS-1$
+    /** private tc image */
+    public static final Image TC_PRIVATE_IMAGE = Plugin.getImage("privateKontext.png"); //$NON-NLS-1$
+    /** Anwendungsfall image */
+    public static final Image TC_ANWENDUNGSFALL_REF_IMAGE = Plugin.getImage("anwendungsfallRef.png"); //$NON-NLS-1$
+    /** Testfall image */
+    public static final Image TC_TESTFALL_REF_IMAGE = Plugin.getImage("testfallRef.png"); //$NON-NLS-1$
+    /** Fachkonzept image */
+    public static final Image TC_FACHKONZEPT_REF_IMAGE = Plugin.getImage("fachkonzeptRef.png"); //$NON-NLS-1$
+    /** public tc image */
+    public static final Image TC_PUBLIC_REF_IMAGE = Plugin.getImage("publicKontextRef.png"); //$NON-NLS-1$
+    /** private tc image */
+    public static final Image TC_PRIVATE_REF_IMAGE = Plugin.getImage("privateKontextRef.png"); //$NON-NLS-1$
     /** name for new test case dialog-image */
     public static final String RENAME_TC_DIALOG_STRING = "renameTC.gif"; //$NON-NLS-1$
     /** name for new test suite dialog-image */

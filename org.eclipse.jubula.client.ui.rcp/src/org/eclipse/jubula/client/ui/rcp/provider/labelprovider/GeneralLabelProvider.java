@@ -279,10 +279,32 @@ public class GeneralLabelProvider extends ColumnLabelProvider
         }
         
         if (element instanceof IExecTestCasePO) {
+            if (((IExecTestCasePO) element).getName().startsWith("TF")) { //$NON-NLS-1$
+                return IconConstants.TC_TESTFALL_REF_IMAGE;
+            } else if (((IExecTestCasePO) element).getName().startsWith("FK")) { //$NON-NLS-1$
+                return IconConstants.TC_FACHKONZEPT_REF_IMAGE;
+            } else if (((IExecTestCasePO) element).getName().startsWith("AF")) { //$NON-NLS-1$
+                return IconConstants.TC_ANWENDUNGSFALL_REF_IMAGE;
+            } else if (((IExecTestCasePO) element).getName().startsWith("+[")) { //$NON-NLS-1$
+                return IconConstants.TC_PUBLIC_REF_IMAGE;
+            } else if (((IExecTestCasePO) element).getName().startsWith("-[")) { //$NON-NLS-1$
+                return IconConstants.TC_PRIVATE_REF_IMAGE;
+            }
             return IconConstants.TC_REF_IMAGE;
         }
 
         if (element instanceof ISpecTestCasePO) {
+            if (((ISpecTestCasePO) element).getName().startsWith("FK")) {
+                return IconConstants.TC_FACHKONZEPT_IMAGE;
+            } else if (((ISpecTestCasePO) element).getName().startsWith("AF")) {
+                return IconConstants.TC_ANWENDUNGSFALL_IMAGE;
+            } else if (((ISpecTestCasePO) element).getName().startsWith("TF")) {
+                return IconConstants.TC_TESTFALL_IMAGE;
+            } else if (((ISpecTestCasePO) element).getName().startsWith("+[")) {
+                return IconConstants.TC_PUBLIC_IMAGE;
+            } else if (((ISpecTestCasePO) element).getName().startsWith("-[")) {
+                return IconConstants.TC_PRIVATE_IMAGE;
+            }
             return IconConstants.TC_IMAGE;
         }
 
