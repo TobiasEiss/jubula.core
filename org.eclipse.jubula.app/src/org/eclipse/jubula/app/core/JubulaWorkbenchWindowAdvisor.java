@@ -60,6 +60,23 @@ public class JubulaWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
      */
     private static final int AUTO_LOGON_JOB_SCHEDULE_DELAY = 1000;
 
+    /** 
+     * all basic action sets that should be hidden when running Jubula as 
+     * a stand-alone client 
+     */
+    private static final String[] ACTION_SETS_TO_HIDE = new String [] {
+        "org.eclipse.ui.actionSet.openFiles", //$NON-NLS-1$
+        "org.eclipse.ui.edit.text.actionSet.convertLineDelimitersTo", //$NON-NLS-1$
+        "org.eclipse.mylyn.tasks.ui.navigation", //$NON-NLS-1$
+        "org.eclipse.ui.edit.text.actionSet.navigation", //$NON-NLS-1$
+        "org.eclipse.ui.edit.text.actionSet.annotationNavigation" //$NON-NLS-1$
+    };
+    
+    /**
+     * the application window title updater
+     */
+    private ApplicationWindowTitleUpdater m_updater;
+    
     /**
      * @author BREDEX GmbH
      * @created 09.04.2011
@@ -132,18 +149,6 @@ public class JubulaWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
         }
     }
 
-    /** 
-     * all basic action sets that should be hidden when running Jubula as 
-     * a stand-alone client 
-     */
-    private static final String[] ACTION_SETS_TO_HIDE = new String [] {
-        "org.eclipse.ui.actionSet.openFiles", //$NON-NLS-1$
-        "org.eclipse.ui.edit.text.actionSet.convertLineDelimitersTo", //$NON-NLS-1$
-        "org.eclipse.mylyn.tasks.ui.navigation", //$NON-NLS-1$
-        "org.eclipse.ui.edit.text.actionSet.navigation", //$NON-NLS-1$
-        "org.eclipse.ui.edit.text.actionSet.annotationNavigation" //$NON-NLS-1$
-    };
-    
     /**
      * @param configurer IWorkbenchWindowConfigurer 
      */
@@ -243,21 +248,28 @@ public class JubulaWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
      * add a permanent listener to update the main window title
      */
     protected void addMainWindowTitleUpdater() {
-        ApplicationWindowTitleUpdater updater = 
-            new ApplicationWindowTitleUpdater();
+        m_updater = new ApplicationWindowTitleUpdater();
         DataEventDispatcher ded = DataEventDispatcher.getInstance();
-        ded.addProjectLoadedListener(updater, true);
-        ded.addDataChangedListener(updater, true);
-        DatabaseStateDispatcher
-            .addDatabaseStateListener(updater);
+        ded.addProjectLoadedListener(m_updater, true);
+        ded.addDataChangedListener(m_updater, true);
+        DatabaseStateDispatcher.addDatabaseStateListener(m_updater);
     }
 
     /**
-     * @throws WorkbenchException 
      * {@inheritDoc}
      */
     public void postWindowRestore() throws WorkbenchException {
         super.postWindowRestore();
         Plugin.showStatusLine((IWorkbenchPart)null);
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    public void dispose() {
+        DataEventDispatcher ded = DataEventDispatcher.getInstance();
+        ded.removeProjectLoadedListener(m_updater);
+        ded.removeDataChangedListener(m_updater);
+        DatabaseStateDispatcher.removeDatabaseStateListener(m_updater);
     }
 }

@@ -19,11 +19,10 @@ import java.util.Set;
  * @created Nov 17, 2006
  */
 public class DatabaseStateDispatcher {
-
     /**
      * gui listener for showing connection window
      */
-    private static transient Set<IDatabaseStateListener> listener;
+    private static Set<IDatabaseStateListener> listener;
 
     /**
      * Private utility constructor.

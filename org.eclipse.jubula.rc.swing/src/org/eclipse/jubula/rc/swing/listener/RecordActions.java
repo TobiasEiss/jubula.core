@@ -315,9 +315,10 @@ public class RecordActions {
      * @param id IComponentIdentifier
      * @param clickcount int
      * @param a Action
+     * @param mouseButton the mouse button used
      */
     protected void selectTableCell(JTable jtbl, IComponentIdentifier id,
-            int clickcount, Action a) {
+            int clickcount, Action a, int mouseButton) {
         int row = jtbl.getSelectedRow();
         int column = jtbl.getSelectedColumn();
         int count = clickcount;
@@ -339,6 +340,7 @@ public class RecordActions {
         tblValues.add("50"); //$NON-NLS-1$
         tblValues.add("percent"); //$NON-NLS-1$
         tblValues.add(Constants.REC_EXT_SELECTION);
+        tblValues.add(String.valueOf(mouseButton));
         
         String logName = createLogicalName(jtbl, id);
         

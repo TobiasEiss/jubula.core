@@ -654,12 +654,21 @@ abstract class NodePO implements INodePO {
     
     /**
      * For Persistence (JPA / EclipseLink) only
-     * Sets the value of the taskId property.
+     * Sets the value of the taskId property. If the length of
+     * the trimmed new taskId string is zero, the taskId property
+     * is set to null.
      * 
      * @param taskId
      *            the new value of the taskId property
      */
     public void setTaskId(String taskId) {
-        m_taskId = taskId;
+        String newTaskId = taskId;
+        if (newTaskId != null) {
+            newTaskId = newTaskId.trim();
+            if (newTaskId.length() == 0) {
+                newTaskId = null;
+            }
+        }
+        m_taskId = newTaskId;
     }
 }

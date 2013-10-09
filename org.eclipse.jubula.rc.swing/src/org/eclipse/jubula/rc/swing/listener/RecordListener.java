@@ -411,7 +411,8 @@ public class RecordListener extends AbstractAutSwingEventListener {
                     JTable jtbl = (JTable)source;
                     int clickcount = me.getClickCount();
                     a = m_recordHelper.compSysToAction(id, "CompSystem.SelectCellNew"); //$NON-NLS-1$
-                    m_recordActions.selectTableCell(jtbl, id, clickcount, a);
+                    m_recordActions.selectTableCell(jtbl, id, clickcount, a,
+                            me.getButton());
                 } else if (source instanceof JMenuItem
                         && !(source instanceof JMenu)) {
                     JMenuItem jmi = (JMenuItem)source;
