@@ -22,4 +22,9 @@ public interface ConfigurationConstants {
      * <code>AUT_AGENT_DEFAULT_PORT</code>
      */
     public static final int AUT_AGENT_DEFAULT_PORT = 60000;
+    
+    /**
+     * default icon
+     */
+    public static final String ICONS_DEFAULT_PATH = "testCase.gif"; //$NON-NLS-1$
 }

@@ -31,6 +31,11 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
      */
     private static final String AUT_AGENT_DEFAULT_HOST = "localhost"; //$NON-NLS-1$
 
+    /**
+     * for the icons
+     */
+    private static final String ICONS_NOTHING_DEFAULT = "new";
+    
     @Override
     public void initializeDefaultPreferences() {
         IPreferenceStore prefStore = Plugin.getDefault().getPreferenceStore();
@@ -40,6 +45,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
         initializeDefaultPreferencesKeyBoardShortCuts(prefStore);
         initializeDefaultPreferencesObservation(prefStore);
         initializeDefaultPreferencesTestResults(prefStore);
+        initializeDefaultPreferencesIcons(prefStore);
 
         prefStore.setDefault(Constants.ASKSTOPAUT_KEY,
                 Constants.ASKSTOPAUT_KEY_DEFAULT);
@@ -174,5 +180,23 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
                 Constants.SINGLELINETRIGGER_KEY_DEFAULT);
         prefStore.setDefault(Constants.MULTILINETRIGGER_KEY,
                 Constants.MULTILINETRIGGER_KEY_DEFAULT);
+    }
+    
+    /**
+    * initialize the default preferences for a preference page 
+    * @param prefStore Preference store
+    */
+    private static void initializeDefaultPreferencesIcons(
+           IPreferenceStore prefStore) {
+        StringBuilder serverValuesBuilder = new StringBuilder();
+        serverValuesBuilder.append(new String(Base64.encodeBase64(
+                ICONS_NOTHING_DEFAULT.getBytes())));
+        serverValuesBuilder.append(StringConstants.SEMICOLON);
+        serverValuesBuilder.append(new String(
+            Base64.encodeBase64(String.valueOf(
+                ConfigurationConstants.ICONS_DEFAULT_PATH).getBytes())));
+        prefStore.setDefault(
+                Constants.ICONS_SETTINGS_KEY, 
+                serverValuesBuilder.toString());
     }
 }

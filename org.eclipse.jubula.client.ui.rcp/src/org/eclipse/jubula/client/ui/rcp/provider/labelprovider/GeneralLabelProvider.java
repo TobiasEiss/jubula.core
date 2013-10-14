@@ -50,6 +50,8 @@ import org.eclipse.jubula.client.ui.rcp.businessprocess.WorkingLanguageBP;
 import org.eclipse.jubula.client.ui.rcp.constants.RcpIconConstants;
 import org.eclipse.jubula.client.ui.rcp.controllers.dnd.LocalSelectionClipboardTransfer;
 import org.eclipse.jubula.client.ui.rcp.i18n.Messages;
+import org.eclipse.jubula.client.ui.rcp.icons.Icon;
+import org.eclipse.jubula.client.ui.rcp.icons.IconModelProvider;
 import org.eclipse.jubula.client.ui.utils.LayoutUtil;
 import org.eclipse.jubula.tools.constants.StringConstants;
 import org.eclipse.swt.SWT;
@@ -279,31 +281,21 @@ public class GeneralLabelProvider extends ColumnLabelProvider
         }
         
         if (element instanceof IExecTestCasePO) {
-            if (((IExecTestCasePO) element).getName().startsWith("TF")) { //$NON-NLS-1$
-                return IconConstants.TC_TESTFALL_REF_IMAGE;
-            } else if (((IExecTestCasePO) element).getName().startsWith("FK")) { //$NON-NLS-1$
-                return IconConstants.TC_FACHKONZEPT_REF_IMAGE;
-            } else if (((IExecTestCasePO) element).getName().startsWith("AF")) { //$NON-NLS-1$
-                return IconConstants.TC_ANWENDUNGSFALL_REF_IMAGE;
-            } else if (((IExecTestCasePO) element).getName().startsWith("+[")) { //$NON-NLS-1$
-                return IconConstants.TC_PUBLIC_REF_IMAGE;
-            } else if (((IExecTestCasePO) element).getName().startsWith("-[")) { //$NON-NLS-1$
-                return IconConstants.TC_PRIVATE_REF_IMAGE;
+            String tcname = ((IExecTestCasePO) element).getName();
+            for (Icon icon : IconModelProvider.INSTANCE.getIcons()) {
+                if (tcname.matches(icon.getRegex())) {
+                    return Plugin.getImage(icon.getRefIconPath());
+                }
             }
             return IconConstants.TC_REF_IMAGE;
         }
 
         if (element instanceof ISpecTestCasePO) {
-            if (((ISpecTestCasePO) element).getName().startsWith("FK")) {
-                return IconConstants.TC_FACHKONZEPT_IMAGE;
-            } else if (((ISpecTestCasePO) element).getName().startsWith("AF")) {
-                return IconConstants.TC_ANWENDUNGSFALL_IMAGE;
-            } else if (((ISpecTestCasePO) element).getName().startsWith("TF")) {
-                return IconConstants.TC_TESTFALL_IMAGE;
-            } else if (((ISpecTestCasePO) element).getName().startsWith("+[")) {
-                return IconConstants.TC_PUBLIC_IMAGE;
-            } else if (((ISpecTestCasePO) element).getName().startsWith("-[")) {
-                return IconConstants.TC_PRIVATE_IMAGE;
+            String tcname = ((ISpecTestCasePO) element).getName();
+            for (Icon icon : IconModelProvider.INSTANCE.getIcons()) {
+                if (tcname.matches(icon.getRegex())) {
+                    return Plugin.getImage(icon.getIconPath());
+                }
             }
             return IconConstants.TC_IMAGE;
         }

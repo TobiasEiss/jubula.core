@@ -277,25 +277,6 @@ public class IconConstants {
     /** test case image */
     public static final Image PROBLEM_CAT_IMAGE = Plugin.getImage("problemCategory.gif"); //$NON-NLS-1$
     /** Anwendungsfall image */
-    public static final Image TC_ANWENDUNGSFALL_IMAGE = Plugin.getImage("anwendungsfall.png"); //$NON-NLS-1$
-    /** Testfall image */
-    public static final Image TC_TESTFALL_IMAGE = Plugin.getImage("testfall.png"); //$NON-NLS-1$
-    /** Fachkonzept image */
-    public static final Image TC_FACHKONZEPT_IMAGE = Plugin.getImage("fachkonzept.png"); //$NON-NLS-1$
-    /** public tc image */
-    public static final Image TC_PUBLIC_IMAGE = Plugin.getImage("publicKontext.png"); //$NON-NLS-1$
-    /** private tc image */
-    public static final Image TC_PRIVATE_IMAGE = Plugin.getImage("privateKontext.png"); //$NON-NLS-1$
-    /** Anwendungsfall image */
-    public static final Image TC_ANWENDUNGSFALL_REF_IMAGE = Plugin.getImage("anwendungsfallRef.png"); //$NON-NLS-1$
-    /** Testfall image */
-    public static final Image TC_TESTFALL_REF_IMAGE = Plugin.getImage("testfallRef.png"); //$NON-NLS-1$
-    /** Fachkonzept image */
-    public static final Image TC_FACHKONZEPT_REF_IMAGE = Plugin.getImage("fachkonzeptRef.png"); //$NON-NLS-1$
-    /** public tc image */
-    public static final Image TC_PUBLIC_REF_IMAGE = Plugin.getImage("publicKontextRef.png"); //$NON-NLS-1$
-    /** private tc image */
-    public static final Image TC_PRIVATE_REF_IMAGE = Plugin.getImage("privateKontextRef.png"); //$NON-NLS-1$
     /** name for new test case dialog-image */
     public static final String RENAME_TC_DIALOG_STRING = "renameTC.gif"; //$NON-NLS-1$
     /** name for new test suite dialog-image */

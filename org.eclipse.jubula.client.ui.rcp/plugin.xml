@@ -355,6 +355,12 @@
       category="org.eclipse.jubula.client.ui.rcp.preferences.mainPrefPage"
       id="org.eclipse.jubula.client.ui.rcp.preferences.ObservPrefPage"
       name="%ObservationPreferences" />
+    <page
+          category="org.eclipse.jubula.client.ui.rcp.preferences.mainPrefPage"
+          class="org.eclipse.jubula.client.ui.rcp.preferences.IconPreferencePage"
+          id="org.eclipse.jubula.client.ui.rcp.preferences.IconPage"
+          name="Icons">
+    </page>
   </extension>
   <extension point="org.eclipse.ui.decorators">
     <decorator

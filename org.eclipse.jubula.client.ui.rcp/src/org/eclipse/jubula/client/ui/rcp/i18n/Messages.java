@@ -880,6 +880,8 @@ public class Messages extends NLS {
     public static String WrongEditorType;
     public static String WrongEditSupportInTestCaseEditor;
     public static String WrongTypeOfElement;
+    public static String IconPropPageDescription;
+    public static String IconPropPageMessage;
     
     
     static {

@@ -8,6 +8,7 @@ Bundle-ClassPath: .,
 Bundle-Activator: org.eclipse.jubula.client.ui.rcp.Plugin
 Bundle-Vendor: Eclipse Jubula
 Bundle-Localization: plugin
+Eclipse-BundleShape: dir
 Export-Package: org.eclipse.jubula.client.ui.rcp,
  org.eclipse.jubula.client.ui.rcp.actions,
  org.eclipse.jubula.client.ui.rcp.businessprocess,

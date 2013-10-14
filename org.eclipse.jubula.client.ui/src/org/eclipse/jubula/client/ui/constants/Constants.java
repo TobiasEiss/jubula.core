@@ -147,6 +147,9 @@ public interface Constants {
     public static final String AUT_AGENT_SETTINGS_KEY = "AUT_AGENT_SETTINGS_KEY"; //$NON-NLS-1$
 
     /** Key for m_text value to be stored as a resource property */
+    public static final String ICONS_SETTINGS_KEY = "ICONS_SETTINGS_KEY"; //$NON-NLS-1$
+    
+    /** Key for m_text value to be stored as a resource property */
     public static final String SHOWCHILDCOUNT_KEY = "SHOWCHILDCOUNT_PREF_KEY"; //$NON-NLS-1$
 
     /** Key for m_text value to be stored as a resource property */
